@@ -16,9 +16,9 @@ class LagoonLogsFormatter extends LogstashFormatter
     /**
      * {@inheritDoc}
      */
-    public function format(array $record): string
+    public function format(LogRecord $record): string
     {
-        $normalized = $this->normalize($record);
+        $normalized = parent::format($record);
 
         $message = [
             '@timestamp' => $normalized['datetime'],
