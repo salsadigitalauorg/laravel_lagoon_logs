@@ -92,11 +92,18 @@ class LagoonLogsFactory
     /**
      * Add extra fields to the log record.
      */
-    public function addExtraFields(array $record): array
+    public function addExtraFields(LogRecord $record): LogRecord
     {
-        $record['extra']['application'] = self::LAGOON_LOGS_DEFAULT_IDENTIFIER;
-        $record['extra']['environment'] = $_SERVER['LAGOON_ENVIRONMENT'] ?? '';
-        $record['extra']['project'] = $_SERVER['LAGOON_PROJECT'] ?? '';
+        if ($record->offsetExists('extra')) {
+          $extra = $record->offsetGet('extra');
+        }
+        if (!is_array($extra)) {
+          $extra = [];
+        }
+        $extra['application'] = self::LAGOON_LOGS_DEFAULT_IDENTIFIER;
+        $extra['environment'] = $_SERVER['LAGOON_ENVIRONMENT'] ?? '';
+        $extra['project'] = $_SERVER['LAGOON_PROJECT'] ?? '';
+        $record->offsetSet('extra', $extra);
         return $record;
     }
 
